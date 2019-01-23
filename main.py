@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from caesar import rotate_string
 
 app = Flask(__name__)
@@ -23,24 +23,30 @@ form = """
                 width: 540px;
                 height: 120px;
             }
+             p.error {
+                color: red;
+            }
         </style>
     </head>
     <body>
 
 
     <!-- create your form here -->
-        <form action="/webcaesar" methods='POST'>
-        <label for="text">
-        <input id="text" type="text" name="rot" value="0">
+    <form action="/webcaesar" methods='POST'>
+        <label for="text"> Rotate by
+        <input id="text" type="text" name="rot" value="0"> </input><br><br>
         </label>
-        <p class="error">{rot_error}</p>
-        <input type="textarea" name="text"><br>
+        <!-- <p class="error">{rot_error}</p>
+        <input type="textarea" name="text" "rows="4" cols="50"> <br> <br>-->
+        <textarea name="text" value="text"> </textarea>
         <input type="submit" value="Submit form">
 
-        </form>
+
+    </form>
     </body>
-    </html>
+</html>
 """
+
 
 
 def is_integer(rot):
@@ -48,22 +54,27 @@ def is_integer(rot):
 
 
 @app.route("/webcaesar", methods=['POST'])
-def encrypt(int):
+def encrypt(text, rot):
     rot_enc= request.form['rot']
     text_enc = request.form['text']
+    encrypted = ''
+    for char in text_enc:
+        encrypted = encrypted + rotate_string(char, rot_enc)
+    return '<h1>{0}</h1>'.format(encrypted)
 
-    rot=''
+    """rot=''
 
     if not is_integer(rot):
         rot_error="Not a valid integer"
         rot_enc=''
     else:
-        rot_enc=int(rot)
+        rot_enc=int(rot)"""
 
-@app.route("/webcaesar", methods=['POST'])
+
+@app.route("/")
 def index():
-    content = form + webcaesar
-    return content
+
+    return form
 
 app.run()
 
