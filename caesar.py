@@ -27,7 +27,6 @@ def rotate_character(char, rot):
         return alphabet[rotated_idx]
 
 def rotate_string(text, rot):
-
     rotated = ''
 
     for char in text:
